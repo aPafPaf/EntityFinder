@@ -1,13 +1,17 @@
 ﻿using ExileCore;
 using ExileCore.PoEMemory.MemoryObjects;
+using SharpDX;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace EntityFinder;
 
 public partial class EntityFinder : BaseSettingsPlugin<EntityFinderSettings>
 {
-    private List<(string name, string meta)> _entityMetaDataToFind = [];
+    private static Dictionary<string, Color> _sharpDxColors;
+
+    private List<EntityInfo> _entityMetaDataToFind = [];
 
     private List<EntityData> entitiesData = [];
 
@@ -15,6 +19,11 @@ public partial class EntityFinder : BaseSettingsPlugin<EntityFinderSettings>
     {
         Reset();
         LoadButton();
+
+        _sharpDxColors = typeof(Color)
+            .GetFields(BindingFlags.Public | BindingFlags.Static)
+            .Where(f => f.FieldType == typeof(Color))
+            .ToDictionary(f => f.Name, f => (Color)f.GetValue(null));
 
         return true;
     }
@@ -35,12 +44,12 @@ public partial class EntityFinder : BaseSettingsPlugin<EntityFinderSettings>
 
         foreach (var data in _entityMetaDataToFind)
         {
-            if (entity.Metadata != data.meta) continue;
+            if (entity.Metadata != data.MetaData) continue;
 
             if (entitiesData.Any(x => x.Id == entity.Id)) continue;
 
             LogMessage($"Found: {data}", 30);
-            entitiesData.Add(new(entity, data.name));
+            entitiesData.Add(new(entity, data.Name, data.Color));
         }
     }
 
