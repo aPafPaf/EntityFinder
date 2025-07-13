@@ -14,4 +14,7 @@ public class EntityFinderSettings : ISettings
 
     [Menu("Radius")]
     public RangeNode<int> Radius { get; set; } = new RangeNode<int>(30, 0, 255);
+
+    [Menu("Debug")]
+    public ToggleNode Debug { get; set; } = new ToggleNode(false);
 }

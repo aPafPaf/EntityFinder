@@ -1,7 +1,5 @@
 ﻿using ExileCore.Shared.Helpers;
 using ImGuiNET;
-using SharpDX;
-using System.Globalization;
 
 namespace EntityFinder;
 
@@ -27,10 +25,11 @@ public partial class EntityFinder
         ImGui.SetNextWindowBgAlpha(0.6f);
         ImGui.Begin("Find Window", ImGuiWindowFlags.NoDecoration);
 
-        if (ImGui.BeginTable("Find Table", 2, ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersOuter | ImGuiTableFlags.BordersV))
+        if (ImGui.BeginTable("Find Table", 3, ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersOuter | ImGuiTableFlags.BordersV))
         {
             ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 48);
-            ImGui.TableSetupColumn("Meta");
+            ImGui.TableSetupColumn("MetaData");
+            ImGui.TableSetupColumn("Color", ImGuiTableColumnFlags.WidthFixed, 20);
 
             foreach (var entity in entitiesData)
             {
@@ -41,6 +40,10 @@ public partial class EntityFinder
                 ImGui.Text(entity.Name);
                 ImGui.TableNextColumn();
                 ImGui.Text(entity.MetaData);
+                ImGui.TableNextColumn();
+                ImGui.ColorButton($"##Color{entity.Id}", ToImGuiColor(entity.Color),
+                    ImGuiColorEditFlags.NoAlpha | ImGuiColorEditFlags.NoTooltip,
+                    new System.Numerics.Vector2(15, 15));
             }
             ImGui.EndTable();
         }

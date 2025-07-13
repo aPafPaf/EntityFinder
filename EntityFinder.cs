@@ -48,7 +48,11 @@ public partial class EntityFinder : BaseSettingsPlugin<EntityFinderSettings>
 
             if (entitiesData.Any(x => x.Id == entity.Id)) continue;
 
-            LogMessage($"Found: {data}", 30);
+            if (Settings.Debug)
+            {
+                LogMessage($"Found: {data}", 30);
+            }
+
             entitiesData.Add(new(entity, data.Name, data.Color));
         }
     }
