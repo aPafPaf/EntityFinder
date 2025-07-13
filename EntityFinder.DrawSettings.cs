@@ -69,14 +69,11 @@ public partial class EntityFinder
 
     public void SaveButton()
     {
-        // Ensure the /config directory exists in the application's root
         string configDir = Path.Combine(AppContext.BaseDirectory, "config");
         Directory.CreateDirectory(configDir);
 
-        // Path to the JSON file
         string filePath = Path.Combine(configDir, "entityMetaData.json");
 
-        // Serialize the _entityMetaDataToFind list to JSON and save using Newtonsoft.Json
         var json = JsonConvert.SerializeObject(_entityMetaDataToFind, Formatting.Indented);
         File.WriteAllText(filePath, json);
     }
@@ -88,7 +85,6 @@ public partial class EntityFinder
 
         if (File.Exists(filePath))
         {
-            // Read and deserialize the JSON file into the list using Newtonsoft.Json
             var json = File.ReadAllText(filePath);
             var loadedList = JsonConvert.DeserializeObject<List<string>>(json);
 
