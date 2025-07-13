@@ -27,7 +27,7 @@ public partial class EntityFinder
 
         if (ImGui.BeginTable("Find Table", 3, ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersOuter | ImGuiTableFlags.BordersV))
         {
-            ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 48);
+            ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 150);
             ImGui.TableSetupColumn("MetaData");
             ImGui.TableSetupColumn("Color", ImGuiTableColumnFlags.WidthFixed, 20);
 
