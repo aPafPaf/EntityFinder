@@ -61,7 +61,7 @@ public partial class EntityFinder
         {
             _entityMetaDataToFind = new List<string>
             {
-                "Metadata/Terrain/Leagues/Settlers/Node/Objects/NodeTypes/PetrifiedWoodObjects/FungalSpawner5",
+                "Metadata/NPC/League/Azmeri/UniqueDealerMaps",
                 "Metadata/Terrain/Leagues/Settlers/Objects/VerisiumBossSubAreaEntrance",
             };
         }
