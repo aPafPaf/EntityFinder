@@ -16,7 +16,13 @@ public partial class EntityFinder
         {
             var metaData = _entityMetaDataToFind[i];
 
-            if (ImGui.InputTextWithHint($"##EntityMeta-{i}", "Enter MetaData...", ref metaData, 128))
+            if (ImGui.InputTextWithHint($"##EntityMeta-{i}", "Enter MetaData...", ref metaData.meta, 128))
+            {
+                _entityMetaDataToFind[i] = metaData;
+            }
+
+            ImGui.SameLine();
+            if (ImGui.InputTextWithHint($"##EntityName-{i}", "Enter Name...", ref metaData.name, 20))
             {
                 _entityMetaDataToFind[i] = metaData;
             }
@@ -35,7 +41,7 @@ public partial class EntityFinder
 
         if (ImGui.Button("AddLine"))
         {
-            _entityMetaDataToFind.Add("");
+            _entityMetaDataToFind.Add(("",""));
         }
 
         ImGui.Spacing();
@@ -59,10 +65,10 @@ public partial class EntityFinder
         ImGui.Spacing();
         if (ImGui.Button("Default"))
         {
-            _entityMetaDataToFind = new List<string>
+            _entityMetaDataToFind = new List<(string,string)>
             {
-                "Metadata/NPC/League/Azmeri/UniqueDealerMaps",
-                "Metadata/Terrain/Leagues/Settlers/Objects/VerisiumBossSubAreaEntrance",
+                ("Metadata/NPC/League/Azmeri/UniqueDealerMaps", "Nameless Seer"),
+                ("Metadata/Terrain/Leagues/Settlers/Objects/VerisiumBossSubAreaEntrance","Verisium Boss"),
             };
         }
     }
@@ -86,7 +92,7 @@ public partial class EntityFinder
         if (File.Exists(filePath))
         {
             var json = File.ReadAllText(filePath);
-            var loadedList = JsonConvert.DeserializeObject<List<string>>(json);
+            var loadedList = JsonConvert.DeserializeObject<List<(string name, string meta)>>(json);
 
             if (loadedList != null)
                 _entityMetaDataToFind = loadedList;

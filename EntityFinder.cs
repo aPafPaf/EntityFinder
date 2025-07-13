@@ -1,7 +1,5 @@
 ﻿using ExileCore;
 using ExileCore.PoEMemory.MemoryObjects;
-using ExileCore.Shared.Helpers;
-using SharpDX;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,9 +7,9 @@ namespace EntityFinder;
 
 public partial class EntityFinder : BaseSettingsPlugin<EntityFinderSettings>
 {
-    private List<string> _entityMetaDataToFind = [];
+    private List<(string name, string meta)> _entityMetaDataToFind = [];
 
-    private List<EntityData> entityDatas = [];
+    private List<EntityData> entitiesData = [];
 
     public override bool Initialise()
     {
@@ -35,19 +33,19 @@ public partial class EntityFinder : BaseSettingsPlugin<EntityFinderSettings>
     {
         if (!Settings.Enable.Value || entity.Type == ExileCore.Shared.Enums.EntityType.Error) return;
 
-        foreach (var targetName in _entityMetaDataToFind)
+        foreach (var data in _entityMetaDataToFind)
         {
-            if (entity.Metadata != targetName) continue;
+            if (entity.Metadata != data.meta) continue;
 
-            if (entityDatas.Any(x => x.Id == entity.Id)) continue;
+            if (entitiesData.Any(x => x.Id == entity.Id)) continue;
 
-            LogMessage($"Found: {targetName}", 30);
-            entityDatas.Add(new(entity));
+            LogMessage($"Found: {data}", 30);
+            entitiesData.Add(new(entity, data.name));
         }
     }
 
     public void Reset()
     {
-        entityDatas = [];
+        entitiesData = [];
     }
 }
