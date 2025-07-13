@@ -1,0 +1,2 @@
+Build failed:
+[13.07.2025 16:45:07, D:\GH\ExileApi-Compiled-3.24\Plugins\Source\EntityFinder\EntityFinder.DrawSettings.cs(25, 102)] CS1026: Требуется ")"

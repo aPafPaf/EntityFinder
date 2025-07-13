@@ -14,9 +14,11 @@ public partial class EntityFinder
         {
             Graphics.DrawCircleInWorld(entityd.WorldPosition.ToVector3Num(), Settings.Radius.Value, Color.Red with { A = (byte)Settings.Transparency }, Settings.Radius.Value / 10);
             Graphics.DrawFilledCircleInWorld(entityd.WorldPosition.ToVector3Num(), Settings.Radius.Value, Color.Red with { A = (byte)(Settings.Transparency / 2) });
-            Graphics.DrawText(entityd.MetaData, new(300, 300 + i));
+            //Graphics.DrawText(entityd.MetaData, new(300, 300 + i));
             i += 20;
         }
+
+        DrawWindow();
     }
 
     private void DrawWindow()

@@ -14,17 +14,18 @@ public partial class EntityFinder
 
         for (int i = 0; i < _entityMetaDataToFind.Count; i++)
         {
-            var metaData = _entityMetaDataToFind[i];
-
-            if (ImGui.InputTextWithHint($"##EntityMeta-{i}", "Enter MetaData...", ref metaData.meta, 128))
+            var data = _entityMetaDataToFind[i];
+            ImGui.PushItemWidth(200);
+            if (ImGui.InputTextWithHint($"##EntityName-{i}", "Enter Name...", ref data.name, 20))
             {
-                _entityMetaDataToFind[i] = metaData;
+                _entityMetaDataToFind[i] = data;
             }
 
             ImGui.SameLine();
-            if (ImGui.InputTextWithHint($"##EntityName-{i}", "Enter Name...", ref metaData.name, 20))
+            ImGui.PushItemWidth(400);
+            if (ImGui.InputTextWithHint($"##EntityMeta-{i}", "Enter MetaData...", ref data.meta, 120))
             {
-                _entityMetaDataToFind[i] = metaData;
+                _entityMetaDataToFind[i] = data;
             }
 
             ImGui.SameLine();
@@ -41,7 +42,7 @@ public partial class EntityFinder
 
         if (ImGui.Button("AddLine"))
         {
-            _entityMetaDataToFind.Add(("",""));
+            _entityMetaDataToFind.Add(("", ""));
         }
 
         ImGui.Spacing();
@@ -65,10 +66,10 @@ public partial class EntityFinder
         ImGui.Spacing();
         if (ImGui.Button("Default"))
         {
-            _entityMetaDataToFind = new List<(string,string)>
+            _entityMetaDataToFind = new List<(string name, string meta)>
             {
-                ("Metadata/NPC/League/Azmeri/UniqueDealerMaps", "Nameless Seer"),
-                ("Metadata/Terrain/Leagues/Settlers/Objects/VerisiumBossSubAreaEntrance","Verisium Boss"),
+                ("Nameless Seer", "Metadata/NPC/League/Azmeri/UniqueDealerMaps"),
+                ("Verisium Boss", "Metadata/Terrain/Leagues/Settlers/Objects/VerisiumBossSubAreaEntrance"),
             };
         }
     }
