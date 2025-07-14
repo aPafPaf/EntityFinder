@@ -10,6 +10,8 @@ public partial class EntityFinder
         int i = 0;
         foreach (var entityd in entitiesData)
         {
+            if (!WorldPositionOnScreenBool(entityd.WorldPosition)) continue;
+
             Graphics.DrawCircleInWorld(entityd.WorldPosition.ToVector3Num(), Settings.Radius.Value, entityd.Color with { A = (byte)Settings.Transparency }, Settings.Radius.Value / 10);
             Graphics.DrawFilledCircleInWorld(entityd.WorldPosition.ToVector3Num(), Settings.Radius.Value, entityd.Color with { A = (byte)(Settings.Transparency / 2) });
             //Graphics.DrawText(entityd.MetaData, new(300, 300 + i));

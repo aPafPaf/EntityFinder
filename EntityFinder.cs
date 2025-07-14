@@ -61,4 +61,23 @@ public partial class EntityFinder : BaseSettingsPlugin<EntityFinderSettings>
     {
         entitiesData = [];
     }
+
+    private bool WorldPositionOnScreenBool(Vector3 worldPos, int edgeBounds = 70)
+    {
+        var windowRect = GameController.Window.GetWindowRectangle();
+        var screenPos = GameController.IngameState.Camera.WorldToScreen(worldPos);
+
+        windowRect.X -= GameController.Window.GetWindowRectangle().Location.X;
+        windowRect.Y -= GameController.Window.GetWindowRectangle().Location.Y;
+
+        var result = GameController.Window.ScreenToClient((int)screenPos.X, (int)screenPos.Y) + GameController.Window.GetWindowRectangle().Location;
+
+        var rectBounds = new SharpDX.RectangleF(
+            x: windowRect.X + edgeBounds,
+            y: windowRect.Y + edgeBounds,
+            width: windowRect.Width - (edgeBounds * 2),
+            height: windowRect.Height - (edgeBounds * 2));
+
+        return rectBounds.Contains(result);
+    }
 }
