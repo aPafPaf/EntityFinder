@@ -67,8 +67,8 @@ public partial class EntityFinder : BaseSettingsPlugin<EntityFinderSettings>
         var windowRect = GameController.Window.GetWindowRectangle();
         var screenPos = GameController.IngameState.Camera.WorldToScreen(worldPos);
 
-        windowRect.X -= GameController.Window.GetWindowRectangle().Location.X;
-        windowRect.Y -= GameController.Window.GetWindowRectangle().Location.Y;
+        windowRect.X -= windowRect.Location.X;
+        windowRect.Y -= windowRect.Location.Y;
 
         var result = GameController.Window.ScreenToClient((int)screenPos.X, (int)screenPos.Y) + GameController.Window.GetWindowRectangle().Location;
 
