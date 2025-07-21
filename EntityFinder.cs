@@ -16,7 +16,7 @@ public partial class EntityFinder : BaseSettingsPlugin<EntityFinderSettings>
         configDir = Path.Combine(AppContext.BaseDirectory, CONFIG_LOCAL_DIR);
 
         Reset();
-        UpdateConfigList();
+        UpdatePresetList();
 
         LoadButton(Settings.CurrentPreset);
 

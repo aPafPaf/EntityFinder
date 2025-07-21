@@ -16,7 +16,7 @@ public partial class EntityFinder
 
         if (presetFiles.Length == 0 && Directory.Exists(configDir))
         {
-            UpdateConfigList();
+            UpdatePresetList();
         }
 
         if (ImGui.BeginCombo("Select preset", Settings.CurrentPreset))
@@ -40,7 +40,7 @@ public partial class EntityFinder
 
         if (ImGui.Button("Update Config List"))
         {
-            UpdateConfigList();
+            UpdatePresetList();
         }
 
         for (int i = 0; i < _entityMetaDataToFind.Count; i++)
@@ -152,7 +152,7 @@ public partial class EntityFinder
         }
     }
 
-    public void UpdateConfigList()
+    public void UpdatePresetList()
     {
         presetFiles = Directory.GetFiles(configDir, "*.json")
                                .Select(Path.GetFileNameWithoutExtension)
