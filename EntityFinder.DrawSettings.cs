@@ -38,7 +38,7 @@ public partial class EntityFinder
             ImGui.EndCombo();
         }
 
-        if (ImGui.Button("Update Presets List"))
+        if (ImGui.Button("Update Preset List"))
         {
             UpdatePresetList();
         }
