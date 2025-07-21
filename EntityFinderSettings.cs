@@ -6,7 +6,6 @@ namespace EntityFinder;
 
 public class EntityFinderSettings : ISettings
 {
-    //Mandatory setting to allow enabling/disabling your plugin
     public ToggleNode Enable { get; set; } = new(false);
 
     [Menu("Drawing in the game")]
@@ -23,6 +22,9 @@ public class EntityFinderSettings : ISettings
 
     [Menu("Debug")]
     public ToggleNode Debug { get; set; } = new(false);
+
+    //[Menu("Current Preset")]
+    public string CurrentPreset { get; set; } 
 }
 
 [Submenu(CollapsedByDefault = true)]

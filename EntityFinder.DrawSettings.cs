@@ -10,19 +10,55 @@ namespace EntityFinder;
 
 public partial class EntityFinder
 {
-
     public override void DrawSettings()
     {
         base.DrawSettings();
+
+        if (presetFiles.Length == 0 && Directory.Exists(configDir))
+        {
+            UpdateConfigList();
+        }
+
+        if (ImGui.BeginCombo("Select preset", Settings.CurrentPreset))
+        {
+            for (int i = 0; i < presetFiles.Length; i++)
+            {
+                bool isSelected = (selectedPresetIndex == i);
+
+                if (ImGui.Selectable(presetFiles[i], isSelected))
+                {
+                    selectedPresetIndex = i;
+                    LoadButton(presetFiles[i]);
+                }
+
+                if (isSelected)
+                    ImGui.SetItemDefaultFocus();
+            }
+
+            ImGui.EndCombo();
+        }
+
+        if (ImGui.Button("Update Config List"))
+        {
+            UpdateConfigList();
+        }
 
         for (int i = 0; i < _entityMetaDataToFind.Count; i++)
         {
             var data = _entityMetaDataToFind[i];
             var name = data.Name;
+            var enable = data.Enable;
             var meta = data.MetaData;
             var color = data.Color;
             var colorName = GetColorName(color);
 
+            ImGui.Checkbox($"##Enable-{i}", ref enable);
+            {
+                data.Enable = enable;
+                _entityMetaDataToFind[i] = data;
+            }
+
+            ImGui.SameLine();
             ImGui.PushItemWidth(200);
             if (ImGui.InputTextWithHint($"##EntityName-{i}", "Enter Name...", ref name, 20))
             {
@@ -42,7 +78,6 @@ public partial class EntityFinder
             ImGui.SameLine();
             var _tempColorVec = ToImGuiColor(color);
 
-            // Изменяем логику открытия комбо-бокса
             bool colorButtonClicked = ImGui.ColorButton($"##Current{GetColorName(color)}", _tempColorVec,
                 ImGuiColorEditFlags.NoAlpha | ImGuiColorEditFlags.NoTooltip,
                 new System.Numerics.Vector2(40, ImGui.GetFrameHeight()));
@@ -85,25 +120,27 @@ public partial class EntityFinder
             ImGui.PopItemWidth();
         }
 
-        if (ImGui.Button("AddLine"))
+        ImGui.Spacing();
+        if (ImGui.Button("Add New Line"))
         {
             _entityMetaDataToFind.Add(new("", "", SharpDX.Color.Red));
         }
 
         ImGui.Spacing();
+        ImGui.PushItemWidth(500);
+        if (ImGui.InputTextWithHint($"##PresetName", "Preset name...", ref presetName, 500))
+        {
+
+        }
+
+        ImGui.SameLine();
         if (ImGui.Button("Save"))
         {
-            SaveButton();
+            SaveButton(presetName);
         }
 
         ImGui.Spacing();
-        if (ImGui.Button("Load"))
-        {
-            LoadButton();
-        }
-
-        ImGui.Spacing();
-        if (ImGui.Button("Reset"))
+        if (ImGui.Button("Reset Area Entity"))
         {
             Reset();
         }
@@ -111,38 +148,64 @@ public partial class EntityFinder
         ImGui.Spacing();
         if (ImGui.Button("Default"))
         {
-            _entityMetaDataToFind = new List<EntityInfo>
+            DefaultButton();
+        }
+    }
+
+    public void UpdateConfigList()
+    {
+        presetFiles = Directory.GetFiles(configDir, "*.json")
+                               .Select(Path.GetFileNameWithoutExtension)
+                               .ToArray();
+    }
+
+    public void DefaultButton()
+    {
+        _entityMetaDataToFind = new List<EntityInfo>
             {
                 new("Nameless Seer", "Metadata/NPC/League/Azmeri/UniqueDealerMaps",SharpDX.Color.Red ),
                 new("Verisium Boss", "Metadata/Terrain/Leagues/Settlers/Objects/VerisiumBossSubAreaEntrance",SharpDX.Color.Blue),
                 new("Stash", "Metadata/MiscellaneousObjects/Stash",SharpDX.Color.LimeGreen),
             };
-        }
+
+        Settings.CurrentPreset = "Default";
     }
 
-    public void SaveButton()
+    public void SaveButton(string presetName)
     {
-        string configDir = Path.Combine(AppContext.BaseDirectory, "config");
         Directory.CreateDirectory(configDir);
 
-        string filePath = Path.Combine(configDir, "entityMetaData.json");
+        string filePath = Path.Combine(configDir, $"{presetName}.json");
 
         var json = JsonConvert.SerializeObject(_entityMetaDataToFind, Formatting.Indented);
         File.WriteAllText(filePath, json);
+
+        Settings.CurrentPreset = presetName;
     }
 
-    public void LoadButton()
+    public void LoadButton(string presetName)
     {
-        string configDir = Path.Combine(AppContext.BaseDirectory, "config");
-        string filePath = Path.Combine(configDir, "entityMetaData.json");
-
-        if (File.Exists(filePath))
+        try
         {
-            var json = File.ReadAllText(filePath);
-            var loadedList = JsonConvert.DeserializeObject<List<EntityInfo>>(json);
+            if (presetName == string.Empty) DefaultButton();
 
-            if (loadedList != null)
-                _entityMetaDataToFind = loadedList;
+            string filePath = Path.Combine(configDir, $"{presetName}.json");
+
+            if (File.Exists(filePath))
+            {
+                var json = File.ReadAllText(filePath);
+                var loadedList = JsonConvert.DeserializeObject<List<EntityInfo>>(json);
+
+                if (loadedList != null)
+                {
+                    _entityMetaDataToFind = loadedList;
+                    Settings.CurrentPreset = presetName;
+                }
+            }
+        }
+        catch (Exception)
+        {
+            DefaultButton();
         }
     }
 

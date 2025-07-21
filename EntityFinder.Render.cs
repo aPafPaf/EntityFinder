@@ -7,20 +7,18 @@ namespace EntityFinder;
 
 public partial class EntityFinder
 {
-    private const int SEGMENTS_CIRCLE = 20;
-
     public override void Render()
     {
         var ui = GameController.IngameState.IngameUi;
 
         foreach (var entityd in entitiesData)
         {
-            if (ui.Map.LargeMap.IsVisible)
+            if (Settings.DrawOnMap && ui.Map.LargeMap.IsVisible)
             {
                 DrawLargeMap(entityd);
             }
 
-            if (!WorldPositionOnScreenBool(entityd.WorldPosition)) continue;
+            if (!Settings.DrawInGame || !WorldPositionOnScreenBool(entityd.WorldPosition)) continue;
 
             Graphics.DrawCircleInWorld(entityd.WorldPosition.ToVector3Num(), Settings.GameSettings.Radius.Value, entityd.Color with { A = (byte)Settings.GameSettings.TransparencyRadius }, Settings.GameSettings.Thickness);
             Graphics.DrawFilledCircleInWorld(entityd.WorldPosition.ToVector3Num(), Settings.GameSettings.Radius.Value - Settings.GameSettings.Thickness, entityd.Color with { A = (byte)(Settings.GameSettings.Transparency) });

@@ -38,6 +38,7 @@ public class EntityData
 public class EntityInfo
 {
     public string Name { get; set; }
+    public bool Enable { get;set; }
     public string MetaData { get; set; }
     public Color Color { get; set; }
 
@@ -46,6 +47,7 @@ public class EntityInfo
         Name = string.Empty;
         MetaData = string.Empty;
         Color = Color.Red;
+        Enable = true;
     }
 
     public EntityInfo(string name, string metaData, Color color)
@@ -53,5 +55,14 @@ public class EntityInfo
         Name = name;
         MetaData = metaData;
         Color = color;
+        Enable = true;
+    }
+
+    public EntityInfo(string name, string metaData, Color color,bool enable)
+    {
+        Name = name;
+        MetaData = metaData;
+        Color = color;
+        Enable = enable;
     }
 }
