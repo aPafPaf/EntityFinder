@@ -38,7 +38,7 @@ public partial class EntityFinder
             ImGui.EndCombo();
         }
 
-        if (ImGui.Button("Update Config List"))
+        if (ImGui.Button("Update Presets List"))
         {
             UpdatePresetList();
         }
@@ -134,13 +134,13 @@ public partial class EntityFinder
         }
 
         ImGui.SameLine();
-        if (ImGui.Button("Save"))
+        if (ImGui.Button("Save Preset"))
         {
             SaveButton(presetName);
         }
 
         ImGui.Spacing();
-        if (ImGui.Button("Reset Area Entity"))
+        if (ImGui.Button("Clearing Found Entity"))
         {
             Reset();
         }
