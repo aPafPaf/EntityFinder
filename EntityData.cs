@@ -10,6 +10,7 @@ public class EntityData
     public string Name { get; set; }
     public Vector3 WorldPosition { get; set; }
     public Color Color { get; set; } = Color.Red;
+    public string AdditionalInfo { get; set; } = string.Empty;
 
     public EntityData(uint id, string metaData, Vector3 worldPosition, Color color)
     {
@@ -26,6 +27,11 @@ public class EntityData
         Name = name;
         WorldPosition = entity.Pos;
         Color = color;
+    }
+
+    public void UpdateAdditionalInfo(string info)
+    {
+        AdditionalInfo = info;
     }
 }
 
