@@ -16,6 +16,8 @@ public partial class EntityFinder : BaseSettingsPlugin<EntityFinderSettings>
         configDir = Path.Combine(AppContext.BaseDirectory, CONFIG_LOCAL_DIR);
 
         Reset();
+        UpdateConfigList();
+
         LoadButton(Settings.CurrentPreset);
 
         _sharpDxColors = typeof(Color)

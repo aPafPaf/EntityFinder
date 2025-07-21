@@ -187,7 +187,7 @@ public partial class EntityFinder
     {
         try
         {
-            if (presetName == string.Empty) DefaultButton();
+            if (presetName == string.Empty || presetFiles.Length == 0) DefaultButton();
 
             string filePath = Path.Combine(configDir, $"{presetName}.json");
 
