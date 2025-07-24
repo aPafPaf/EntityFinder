@@ -1,8 +1,5 @@
 ﻿using ExileCore;
 using ExileCore.PoEMemory.Elements;
-using ExileCore.RenderQ;
-using ExileCore.Shared.Enums;
-using ExileCore.Shared.Helpers;
 using ImGuiNET;
 using System.Numerics;
 
@@ -41,7 +38,7 @@ public partial class EntityFinder
 
     private void DrawLargeMap(EntityData entityData)
     {
-        Vector2 gridPos = entityData.WorldPosition.WorldToGrid();
+        Vector2 gridPos = entityData.GridPosition;
         SharpDX.Color color = entityData.Color;
 
         var map = GameController.Game.IngameState.IngameUi.Map;
@@ -70,7 +67,7 @@ public partial class EntityFinder
             var finalPositon = new Vector2(finalPos.X, finalPos.Y);
             Graphics.DrawCircle(
                 finalPositon,
-                Settings.MapSettings.Radius.Value,
+                Settings.MapSettings.Radius.Value * (mapScale / 2),
                 color with { A = (byte)Settings.MapSettings.Transparency },
                 Settings.MapSettings.Thickness.Value, SEGMENTS_CIRCLE);
         }
@@ -78,7 +75,7 @@ public partial class EntityFinder
         if (Settings.MapSettings.DrawText)
         {
             var finalPosition = new Vector2(finalPos.X + Settings.MapSettings.OffsetX, finalPos.Y + Settings.MapSettings.OffsetY);
-            var text = entityData.Name + ' ' + entityData.RenderName;
+            var text = $"[{entityData.Id}] {entityData.Name} - {entityData.RenderName}";
             Graphics.DrawTextWithBackground(text, finalPosition, entityData.Color, SharpDX.Color.Black);
         }
     }
@@ -91,7 +88,7 @@ public partial class EntityFinder
 
         if (ImGui.BeginTable("Find Table", 4, ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersOuter | ImGuiTableFlags.BordersV))
         {
-            ImGui.TableSetupColumn("Id", ImGuiTableColumnFlags.WidthFixed, 4);
+            ImGui.TableSetupColumn("Id", ImGuiTableColumnFlags.WidthFixed, 40);
             ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 150);
             ImGui.TableSetupColumn("MetaData");
             ImGui.TableSetupColumn("Color", ImGuiTableColumnFlags.WidthFixed, 20);

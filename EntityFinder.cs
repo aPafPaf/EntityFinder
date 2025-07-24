@@ -2,7 +2,6 @@
 using ExileCore.PoEMemory.MemoryObjects;
 using SharpDX;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -37,7 +36,7 @@ public partial class EntityFinder : BaseSettingsPlugin<EntityFinderSettings>
     {
         if (!Settings.Enable.Value || entity.Type == ExileCore.Shared.Enums.EntityType.Error) return;
 
-        foreach (var data in _entityMetaDataToFind.Where(x=>x.Enable))
+        foreach (var data in _entityMetaDataToFind.Where(x => x.Enable))
         {
             if (entity.Metadata != data.MetaData) continue;
 
