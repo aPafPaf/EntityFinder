@@ -1,4 +1,5 @@
-﻿using ExileCore.Shared.Attributes;
+﻿using ExileCore;
+using ExileCore.Shared.Attributes;
 using ExileCore.Shared.Interfaces;
 using ExileCore.Shared.Nodes;
 
@@ -55,6 +56,15 @@ public class MapSettings
 [Submenu(CollapsedByDefault = true)]
 public class GameSettings
 {
+    [Menu("Draw text")]
+    public ToggleNode DrawText { get; set; } = new ToggleNode(true);
+
+    [Menu("Offset Text X")]
+    public RangeNode<int> OffsetX { get; set; } = new RangeNode<int>(0, -100, 100);
+
+    [Menu("Offset Text Y")]
+    public RangeNode<int> OffsetY { get; set; } = new RangeNode<int>(0, -100, 100);
+
     [Menu("Transparency")]
     public RangeNode<int> Transparency { get; set; } = new RangeNode<int>(255, 0, 255);
 

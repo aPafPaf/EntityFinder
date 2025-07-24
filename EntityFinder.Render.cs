@@ -1,4 +1,7 @@
-﻿using ExileCore.PoEMemory.Elements;
+﻿using ExileCore;
+using ExileCore.PoEMemory.Elements;
+using ExileCore.RenderQ;
+using ExileCore.Shared.Enums;
 using ExileCore.Shared.Helpers;
 using ImGuiNET;
 using System.Numerics;
@@ -11,17 +14,26 @@ public partial class EntityFinder
     {
         var ui = GameController.IngameState.IngameUi;
 
-        foreach (var entityd in entitiesData)
+        foreach (var entityData in entitiesData)
         {
             if (Settings.DrawOnMap && ui.Map.LargeMap.IsVisible)
             {
-                DrawLargeMap(entityd);
+                DrawLargeMap(entityData);
             }
 
-            if (!Settings.DrawInGame || !WorldPositionOnScreenBool(entityd.WorldPosition)) continue;
+            if (!Settings.DrawInGame || !WorldPositionOnScreenBool(entityData.WorldPosition)) continue;
 
-            Graphics.DrawCircleInWorld(entityd.WorldPosition.ToVector3Num(), Settings.GameSettings.Radius.Value, entityd.Color with { A = (byte)Settings.GameSettings.TransparencyRadius }, Settings.GameSettings.Thickness);
-            Graphics.DrawFilledCircleInWorld(entityd.WorldPosition.ToVector3Num(), Settings.GameSettings.Radius.Value - Settings.GameSettings.Thickness, entityd.Color with { A = (byte)(Settings.GameSettings.Transparency) });
+            Graphics.DrawCircleInWorld(entityData.WorldPosition, Settings.GameSettings.Radius.Value, entityData.Color with { A = (byte)Settings.GameSettings.TransparencyRadius }, Settings.GameSettings.Thickness);
+            Graphics.DrawFilledCircleInWorld(entityData.WorldPosition, Settings.GameSettings.Radius.Value - Settings.GameSettings.Thickness, entityData.Color with { A = (byte)(Settings.GameSettings.Transparency) });
+
+            if (Settings.GameSettings.DrawText.Value)
+            {
+                var screenPosition = GameController.IngameState.Data.GetGridScreenPosition(entityData.GridPosition);
+                var resultPosition = screenPosition + new Vector2(Settings.GameSettings.OffsetX, Settings.GameSettings.OffsetY);
+
+                var text = $"[{entityData.Id}] {entityData.Name}-{entityData.RenderName}";
+                Graphics.DrawTextWithBackground(text, resultPosition, entityData.Color, SharpDX.Color.Black);
+            }
         }
 
         DrawWindow();
@@ -29,7 +41,7 @@ public partial class EntityFinder
 
     private void DrawLargeMap(EntityData entityData)
     {
-        Vector2 gridPos = entityData.WorldPosition.WorldToGrid().ToVector2Num();
+        Vector2 gridPos = entityData.WorldPosition.WorldToGrid();
         SharpDX.Color color = entityData.Color;
 
         var map = GameController.Game.IngameState.IngameUi.Map;
@@ -65,9 +77,9 @@ public partial class EntityFinder
 
         if (Settings.MapSettings.DrawText)
         {
-            var finalPositon = new Vector2(finalPos.X + Settings.MapSettings.OffsetX, finalPos.Y + Settings.MapSettings.OffsetY);
-            var text = entityData.Name + ' ' + entityData.AdditionalInfo;
-            Graphics.DrawTextWithBackground(text, finalPositon, entityData.Color, SharpDX.Color.Black);
+            var finalPosition = new Vector2(finalPos.X + Settings.MapSettings.OffsetX, finalPos.Y + Settings.MapSettings.OffsetY);
+            var text = entityData.Name + ' ' + entityData.RenderName;
+            Graphics.DrawTextWithBackground(text, finalPosition, entityData.Color, SharpDX.Color.Black);
         }
     }
 
@@ -77,8 +89,9 @@ public partial class EntityFinder
         ImGui.SetNextWindowBgAlpha(0.6f);
         ImGui.Begin("Find Window", ImGuiWindowFlags.NoDecoration);
 
-        if (ImGui.BeginTable("Find Table", 3, ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersOuter | ImGuiTableFlags.BordersV))
+        if (ImGui.BeginTable("Find Table", 4, ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersOuter | ImGuiTableFlags.BordersV))
         {
+            ImGui.TableSetupColumn("Id", ImGuiTableColumnFlags.WidthFixed, 4);
             ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 150);
             ImGui.TableSetupColumn("MetaData");
             ImGui.TableSetupColumn("Color", ImGuiTableColumnFlags.WidthFixed, 20);
@@ -89,6 +102,8 @@ public partial class EntityFinder
 
                 ImGui.TableNextColumn();
 
+                ImGui.Text($"[{entity.Id}]");
+                ImGui.TableNextColumn();
                 ImGui.Text(entity.Name);
                 ImGui.TableNextColumn();
                 ImGui.Text(entity.MetaData);

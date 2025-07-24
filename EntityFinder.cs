@@ -48,8 +48,7 @@ public partial class EntityFinder : BaseSettingsPlugin<EntityFinderSettings>
                 LogMessage($"Found: {data}", 30);
             }
 
-            EntityData entityData = new EntityData(entity, data.Name, data.Color);
-            entityData.UpdateAdditionalInfo(entity.RenderName);
+            EntityData entityData = new(entity, data.Name, data.Color);
 
             entitiesData.Add(entityData);
         }

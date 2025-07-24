@@ -8,30 +8,22 @@ public class EntityData
     public uint Id { get; set; }
     public string MetaData { get; set; }
     public string Name { get; set; }
-    public Vector3 WorldPosition { get; set; }
-    public Color Color { get; set; } = Color.Red;
-    public string AdditionalInfo { get; set; } = string.Empty;
 
-    public EntityData(uint id, string metaData, Vector3 worldPosition, Color color)
-    {
-        Id = id;
-        MetaData = metaData;
-        WorldPosition = worldPosition;
-        Color = color;
-    }
+    public System.Numerics.Vector3 WorldPosition { get; set; }
+    public System.Numerics.Vector2 GridPosition { get; set; }
+
+    public Color Color { get; set; } = Color.Red;
+    public string RenderName { get; set; } = string.Empty;
 
     public EntityData(Entity entity, string name, Color color)
     {
         Id = entity.Id;
         MetaData = entity.Metadata;
         Name = name;
-        WorldPosition = entity.Pos;
+        WorldPosition = entity.PosNum;
+        GridPosition = entity.GridPosNum;
         Color = color;
-    }
-
-    public void UpdateAdditionalInfo(string info)
-    {
-        AdditionalInfo = info;
+        RenderName = entity.RenderName;
     }
 }
 

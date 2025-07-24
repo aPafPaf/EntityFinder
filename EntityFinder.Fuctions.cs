@@ -9,7 +9,7 @@ public partial class EntityFinder
         entitiesData = [];
     }
 
-    private bool WorldPositionOnScreenBool(Vector3 worldPos, int edgeBounds = 70)
+    private bool WorldPositionOnScreenBool(System.Numerics.Vector3 worldPos, int edgeBounds = 70)
     {
         var windowRect = GameController.Window.GetWindowRectangle();
         var screenPos = GameController.IngameState.Camera.WorldToScreen(worldPos);
