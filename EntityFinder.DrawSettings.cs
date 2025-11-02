@@ -154,10 +154,16 @@ public partial class EntityFinder
 
     public void UpdatePresetList()
     {
+        if (!Directory.Exists(configDir))
+        {
+            Directory.CreateDirectory(configDir);
+        }
+
         presetFiles = Directory.GetFiles(configDir, "*.json")
                                .Select(Path.GetFileNameWithoutExtension)
                                .ToArray();
     }
+
 
     public void DefaultButton()
     {

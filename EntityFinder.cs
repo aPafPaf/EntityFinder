@@ -19,12 +19,17 @@ public partial class EntityFinder : BaseSettingsPlugin<EntityFinderSettings>
 
         LoadButton(Settings.CurrentPreset);
 
+        return true;
+    }
+
+    public override void OnLoad()
+    {
         _sharpDxColors = typeof(Color)
             .GetFields(BindingFlags.Public | BindingFlags.Static)
             .Where(f => f.FieldType == typeof(Color))
             .ToDictionary(f => f.Name, f => (Color)f.GetValue(null));
 
-        return true;
+        base.OnLoad();
     }
 
     public override void AreaChange(AreaInstance area)
